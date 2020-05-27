@@ -28,9 +28,11 @@ Route::get('/old-bikes', 'ApiController\ClientController@getOldBikes');
 Route::post('/sign-up', 'ApiController\ClientController@saveSeller');
 
 Route::post('/log-in', 'ApiController\ClientController@sellerLogin');
+Route::get('/user-profile/{id}', 'ApiController\ClientController@getUserProfile');
 Route::get('/all-brands', 'ApiController\ClientController@getAllBrands');
 Route::get('/{brand}', 'ApiController\ClientController@getModel');
 Route::get('/{brand}/{model}', 'ApiController\ClientController@getVersion');
+
 
 Route::post('/add-bike-for-sale/', 'ApiController\ClientController@saveBikeForSale');
 

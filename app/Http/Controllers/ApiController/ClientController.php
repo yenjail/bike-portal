@@ -255,7 +255,7 @@ class ClientController extends Controller
         if ($users) {
             if (Hash::check($data['password'], $users->password)) {
                 $bikes = SellingBike::where('seller_id',$users->id)->with('bike','image','seller')->get();
-                return [$users,$bikes];
+                return $users;
             } else {
                 return ['message'=>'Password is incorrect'];
             }
@@ -263,6 +263,12 @@ class ClientController extends Controller
             return ['message'=>'User does not exist'];
         }
       }
+    }
+
+    public function getUserProfile($id){
+        $userDetails = Seller::where('id', $id)->first();
+        $profileDetails = SellingBike::where('seller_id',$id)->with('bike','image','seller')->get();
+        return [$userDetails, $profileDetails];
     }
 
     public function getAllBrands(){
