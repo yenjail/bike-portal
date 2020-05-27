@@ -119,11 +119,19 @@
                         </div>
                       </div>
 
+
+
                        <div class="item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align" for="make_year">Manufactured Year <span class="required"></span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                          <input type="date" id="make_year" name="make_year" class="form-control">
+
+                          <select id="make_year" name="make_year" required class="form-control">
+                            <option>Select Year</option>
+                            <?php foreach($years as $year) : ?>
+                              <option value="<?php echo $year; ?>"><?php echo $year; ?></option>
+                            <?php endforeach; ?>
+                          </select>
                           @if ($errors->has('make_year'))
                               <span class="help-block" style="color: red;">
                                 <strong>{{ $errors->first('make_year') }}</strong>
@@ -162,7 +170,7 @@
                         <label class="col-form-label col-md-3 col-sm-3 label-align" for="engine_cc">Color<span class="required"></span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                          <input type="text" id="color" name="color" class="form-control">
+                          <input type="color" id="color" name="color" class="form-control">
                           @if ($errors->has('color'))
                               <span class="help-block" style="color: red;">
                                 <strong>{{ $errors->first('color') }}</strong>

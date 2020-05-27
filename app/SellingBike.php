@@ -14,6 +14,10 @@ class SellingBike extends Model
         return $this->belongsTo('App\Bike');
     }
 
+    public function seller(){
+        return $this->belongsTo('App\Seller');
+    }
+
     public function image(){
     	return $this->hasOne('App\BikeImage');
     }

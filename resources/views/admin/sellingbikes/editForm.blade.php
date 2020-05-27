@@ -129,11 +129,17 @@
                         </div>
                       </div>
 
-                       <div class="item form-group">
+                      <div class="item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align" for="make_year">Manufactured Year <span class="required"></span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                          <input type="date" id="make_year" name="make_year" class="form-control" value="{{isset($bikes->make_year)? $bikes->make_year : ''}}">
+
+                          <select id="make_year" name="make_year" required class="form-control">
+                            <option>Select Year</option>
+                            <?php foreach($years as $year) : ?>
+                              <option value="<?php echo $year; ?>" @if($bikes->make_year==$year) selected='selected' @endif><?php echo $year; ?></option>
+                            <?php endforeach; ?>
+                          </select>
                           @if ($errors->has('make_year'))
                               <span class="help-block" style="color: red;">
                                 <strong>{{ $errors->first('make_year') }}</strong>
@@ -148,8 +154,8 @@
                         <div class="col-md-6 col-sm-6 ">
                           <select name="bike_status" class="form-control" id="bike_status" name="bike_status" required="required">
                             <option value="">Select Bike Status</option>
-                            <option value="used">Used</option>
-                            <option value="unused">Unused</option>
+                            <option value="used"@if($bikes->bike_status=='used') selected='selected' @endif>Used</option>
+                            <option value="unused"@if($bikes->bike_status=='unused') selected='selected' @endif>Unused</option>
 
                           </select>
                         </div>
@@ -172,7 +178,7 @@
                         <label class="col-form-label col-md-3 col-sm-3 label-align" for="color">Color<span class="required"></span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                          <input type="text" id="color" name="color" class="form-control" value="{{isset($bikes->color)? $bikes->color : ''}}">
+                          <input type="color" id="color" name="color" class="form-control" value="{{isset($bikes->color)? $bikes->color : ''}}">
                           @if ($errors->has('color'))
                               <span class="help-block" style="color: red;">
                                 <strong>{{ $errors->first('color') }}</strong>

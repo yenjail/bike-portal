@@ -32,7 +32,7 @@
                           {{ Session::get('flash_message') }}
                         </div>
                       @endif
-                     
+
                     </div>
                     <div class="row">
                       <div class="col-sm-12">
@@ -40,9 +40,7 @@
                           <table id="datatable" class="table table-hover table-bordered" style="width:100%">
                             <thead>
                               <tr>
-                                <th>SN
-
-                              </th>
+                                <th>SN</th>
                               <th>Bike Details</th>
                               <th >Current Market Price (Rs.)</th>
                               <th>Features</th>
@@ -60,12 +58,12 @@
                                  <td id="">
                                   <strong>BRAND: {{$list->brand}} </strong> <br>
                                   <strong>MODEL: {{$list->model}} </strong>
-                                </td>                             
+                                </td>
                                   <td>
                                     {{number_format((float)$list->current_mp,2)}}
                                   </td>
                                   <td>{{$list->features}}<br></td>
-                                  
+
                                   <td><a href="{{route('bike.edit', $list->id)}}" title="Edit" id="editCategory" class="btn btn-success">
                                       <i class="fa fa-edit"></i></a>
                                       </i>
@@ -75,7 +73,7 @@
                                 </tr>
                                 @endforeach
                               @endif
-                             
+
                             </tbody>
                           </table>
                         </div>
@@ -90,5 +88,5 @@
 
 @section('custom_script')
 
- 
+
 @endsection

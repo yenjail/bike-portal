@@ -17,15 +17,14 @@ use Carbon\Carbon;
 class SellingBikesController extends Controller
 {
     public function index(){
-    	$bikes = DB::table('bikes')
-				->join('selling_bikes','bikes.id','=','selling_bikes.bike_id')
-				->get();
+        $bikes = SellingBike::with('bike','image','seller')->get();
     	return view('admin.sellingbikes.index',compact('bikes'));
     }
 
     public function showForm(){
     $brand = Bike::latest()->distinct('brand')->get(['brand']);
-      return view("admin.sellingbikes.form",compact('brand'));
+    $years = array_reverse(range(1900, strftime("%Y", time())));
+      return view("admin.sellingbikes.form",compact('brand','years'));
     }
 
     public function edit(Request $request,$id){
@@ -35,8 +34,9 @@ class SellingBikesController extends Controller
         $brand = Bike::latest()->distinct('brand')->get(['brand']);
 
         $proImage = BikeImage::where('selling_bike_id',$id)->get();
+        $years = array_reverse(range(1900, strftime("%Y", time())));
 
-        return view('admin.sellingbikes.editForm', compact('bikes','proImage','brand'));
+        return view('admin.sellingbikes.editForm', compact('bikes','proImage','brand','years'));
       }
 
     public function fetch(Request $request){

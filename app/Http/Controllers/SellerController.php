@@ -68,31 +68,31 @@ class SellerController extends Controller
     	$request->validate([
             'name' => 'required',
             'location' => 'required|max:100',
-            'email' => 'required|unique:sellers',
+            'email' => 'required',
             'number' => 'required',
           ]);
 
       try{
         $update = Seller::findOrFail($id);
 
-        $update->name= $request->brand;
-        $update->location= $request->model;
-        $update->email= $request->version;
-        $update->number= $request->current_mp;
+        $update->name= $request->name;
+        $update->location= $request->location;
+        $update->email= $request->email;
+        $update->number= $request->number;
+        $update->password= $request->password;
         $myUpdate = $update->update();
 
-        $bike = $update->id;
 
       if ($myUpdate) {
 
-            Session::flash('flash_message', 'Bike details successfully updated!');
+            Session::flash('flash_message', 'Seller details successfully updated!');
 
-            return redirect()->route('bike.index');
+            return redirect()->route('seller.index');
           }
           else {
-            Session::flash('flash_message', 'Bike details could not be updated!');
+            Session::flash('flash_message', 'Seller details could not be updated!');
 
-            return redirect()->route('bike.index');
+            return redirect()->route('seller.index');
           }
 
 

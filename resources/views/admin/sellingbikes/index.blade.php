@@ -44,8 +44,9 @@
 
                               </th>
                               <th>Bike Details</th>
-                              <th >Current Market Price (Rs.)</th>
+                              <th>Current Market Price (Rs.)</th>
                               <th>Additional details</th>
+                              <th>Seller details</th>
                               <th>Action
 
                               </th>
@@ -58,19 +59,29 @@
                                 <tr>
                                   <td>{{++$key}}</td>
                                  <td id="">
-                                  <strong>BRAND: {{$list->brand}} </strong> <br>
-                                  <strong>MODEL: {{$list->model}} </strong><br>
-                                  <strong>
-                                    KM RUN: {{$list->kms_run}} </strong><br>
-                                    <strong>ENGINE: {{$list->engine_cc}}</strong><br>
-                                    <strong>COLOR: {{$list->color}}</strong><br>
-                                    <strong>BIKE STATUS: {{$list->bike_status}}</strong><br>
+                                  <strong>BRAND: {{$list->bike->brand}} </strong> <br>
+                                  <strong>MODEL: {{$list->bike->model}} </strong><br>
+                                  <strong>VERSION: {{$list->bike->version}} </strong><br>
+                                  <strong>KM RUN: {{$list->kms_run}} </strong><br>
+                                  <strong>ENGINE CC: {{$list->bike->version}} </strong><br>
+                                  <strong>BIKE STATUS: {{$list->bike_status}} </strong><br>
+                                  <strong>MANUFACTURED: {{$list->make_year}}</strong><br>
+                                  <strong>COLOR: {{$list->color}}</strong><br>
                                 </td>
                                   <td>
-                                    {{number_format((float)$list->current_mp,2)}} <br>
+                                    {{number_format((float)$list->bike->current_mp,2)}} <br>
                                     Asked Price: Rs. {{number_format((float)$list->asking_price,2)}}
                                   </td>
-                                  <td>{{$list->features}}<br></td>
+                                  <td>{{$list->bike->features}}<br></td>
+                                  <td>@if ($list->seller_id == null)
+                                    <strong>SELLER NAME: {{$list->seller_name}}</strong><br>
+                                    <strong>CONTACT NO: {{$list->phone}}</strong><br>
+                                    @else
+                                    <strong>SELLER NAME: {{$list->seller->name}}</strong><br>
+                                    <strong>CONTACT NO: {{$list->seller->phone}}</strong><br>
+                                    <strong>LOCATION: {{$list->seller->location}}</strong><br>
+
+                                  @endif</td>
 
                                   <td>
                                     <a href="{{route('sellingbike.edit', $list->id)}}" title="Edit" id="editCategory" class="btn btn-success">

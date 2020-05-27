@@ -42,64 +42,68 @@
                     <form method="POST" action="{{ route('seller.update', $seller->id) }}" enctype="multipart-data" class="form-horizontal form-label-left">
                       {{ csrf_field() }}
 
-                       <div class="item form-group">
-                        <label class="col-form-label col-md-3 col-sm-3 label-align" for="brand">Brand<span class="required">*</span>
+                      <div class="item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align" for="brand">Name<span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                          <input type="text" id="brand" required="required" name="brand" class="form-control" value="{{isset($bikes->brand)? $bikes->brand : ''}}">
-                            @if ($errors->has('brand'))
+                          <input type="text" id="name" required="required" name="name" class="form-control" value="{{isset($seller->name)? $seller->name : ''}}">
+                            @if ($errors->has('name'))
                               <span class="help-block" style="color: red;">
-                                <strong>{{ $errors->first('brand') }}</strong>
+                                <strong>{{ $errors->first('name') }}</strong>
                               </span>
                             @endif
                         </div>
                       </div>
 
                       <div class="item form-group">
-                        <label class="col-form-label col-md-3 col-sm-3 label-align" for="model">Model <span class="required">*</span>
+                        <label class="col-form-label col-md-3 col-sm-3 label-align" for="model">Location <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                          <input type="text" id="model" required="required" name="model" class="form-control" value="{{isset($bikes->model)? $bikes->model : ''}}">
-                            @if ($errors->has('model'))
+                          <input type="text" id="location" required="required" name="location" class="form-control" value="{{isset($seller->location)? $seller->location : ''}}">
+                            @if ($errors->has('location'))
                               <span class="help-block" style="color: red;">
-                                <strong>{{ $errors->first('model') }}</strong>
+                                <strong>{{ $errors->first('location') }}</strong>
                               </span>
                             @endif
                         </div>
                       </div>
 
                       <div class="item form-group">
-                        <label class="col-form-label col-md-3 col-sm-3 label-align" for="version">Version <span class="required"></span>
+                        <label class="col-form-label col-md-3 col-sm-3 label-align" for="password">Password <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                          <input type="text" id="version" name="version" class="form-control" value="{{isset($bikes->version)? $bikes->version : ''}}">
-                          @if ($errors->has('version'))
+                          <input type="password" id="password" required="required" name="password" class="form-control" value="{{isset($seller->password)? $seller->password : ''}}">
+                            @if ($errors->has('password'))
                               <span class="help-block" style="color: red;">
-                                <strong>{{ $errors->first('version') }}</strong>
+                                <strong>{{ $errors->first('password') }}</strong>
                               </span>
                             @endif
                         </div>
                       </div>
 
                       <div class="item form-group">
-                        <label class="col-form-label col-md-3 col-sm-3 label-align" for="current_mp">Price (Rs.) <span class="required">*</span>
+                        <label class="col-form-label col-md-3 col-sm-3 label-align" for="email">Email <span class="required"></span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                          <input type="number" step="0.01" id="current_mp" name="current_mp" required="required" class="form-control" value="{{isset($bikes->current_mp)? $bikes->current_mp : ''}}">
-                          @if ($errors->has('price'))
+                          <input type="email" id="email" name="email" class="form-control" value="{{isset($seller->email)? $seller->email : ''}}">
+                          @if ($errors->has('email'))
                               <span class="help-block" style="color: red;">
-                                <strong>{{ $errors->first('price') }}</strong>
+                                <strong>{{ $errors->first('email') }}</strong>
                               </span>
                             @endif
                         </div>
                       </div>
 
                       <div class="item form-group">
-                        <label class="col-form-label col-md-3 col-sm-3 label-align">Features <span class="required">*</span>
+                        <label class="col-form-label col-md-3 col-sm-3 label-align" for="current_mp">Contact Number<span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                          <textarea id="features" type="text" class="form-control" rows="6" cols="50"
-                                        name="features" value="{{ old('features') }}" required > {{isset($bikes->features)? $bikes->features : ''}}</textarea>
+                          <input type="text" id="number" name="number" required="required" class="form-control"value="{{isset($seller->number)? $seller->number : ''}}">
+                          @if ($errors->has('number'))
+                              <span class="help-block" style="color: red;">
+                                <strong>{{ $errors->first('number') }}</strong>
+                              </span>
+                            @endif
                         </div>
                       </div>
 
