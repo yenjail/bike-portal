@@ -13,6 +13,7 @@ use App\Seller;
 use Redirect;
 use Image;
 use File;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Validator;
 
@@ -42,7 +43,7 @@ class ClientController extends Controller
 
     public function saveBikeForSale(Request $request){
         if($request->saleBike){
-            $item = json_decode($request->saleBike);
+            $item = $request->saleBike;
 
             $selling_bike =new SellingBike();
             $selling_bike->bike_id= $item->bike_id;
@@ -217,7 +218,7 @@ class ClientController extends Controller
 
         if ($validator->fails()) {
           return response()->json(['errors'=>$validator->errors()]);
-            
+
         }
         else{
           $seller=new Seller();
@@ -237,4 +238,32 @@ class ClientController extends Controller
           }
         }
       }
+
+      public function sellerLogin(Request $request){
+        $validator = Validator::make($request->all(), [
+        'email' => 'required',
+        'password' => 'required',
+       ]);
+
+       if ($validator->fails()) {
+            return response()->json(['errors'=>$validator->errors()]);
+       }
+      else{
+        $email = $request->email;
+        $data = $request->all();
+        $users = Seller::where('email', $data['email'])->first();
+        if ($users) {
+            if (Hash::check($data['password'], $users->password)) {
+                $bikes = SellingBike::where('seller_id',$users->id)->with('bike','image','seller')->get();
+                return $bikes;
+            } else {
+                return ['message'=>'Password is incorrect'];
+            }
+        } else {
+            return ['message'=>'User does not exist'];
+        }
+      }
+
+
+    }
 }

@@ -27,8 +27,8 @@ Route::get('/old-bikes', 'ApiController\ClientController@getOldBikes');
 
 Route::post('/sign-up', 'ApiController\ClientController@saveSeller');
 
+Route::post('/log-in', 'ApiController\ClientController@sellerLogin');
+
 Route::post('/add-bike-for-sale/', 'ApiController\ClientController@saveBikeForSale');
 
-Route::post('hellopostapi', function() {
-    return json_encode( 'we are getting POST response');
-});
+
