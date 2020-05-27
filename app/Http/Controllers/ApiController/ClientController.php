@@ -14,6 +14,7 @@ use Redirect;
 use Image;
 use File;
 use Illuminate\Support\Facades\Hash;
+use Validator;
 
 class ClientController extends Controller
 {
@@ -206,24 +207,34 @@ class ClientController extends Controller
       }
 
       public function saveSeller(Request $request){
-        $request->validate([
-            'name' => 'required',
+        $validator = Validator::make($request->all(), [
+             'name' => 'required',
             'contact' => 'required',
             'email' => 'required|email|unique:sellers',
             'location' => 'required',
             'password' => 'required',
         ]);
-        if($request){
-            return Seller::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'number' => $request->contact,
-                'location' => $request->location,
-                'password' => Hash::make($request->password),
-            ]);
+
+        if ($validator->fails()) {
+          return response()->json(['errors'=>$validator->errors()]);
+            
         }
         else{
-            return "No seller data provided";
+          $seller=new Seller();
+          $seller->name = $request->name;
+          $seller->email= $request->email;
+          $seller->number = $request->contact;
+          $seller->location= $request->location;
+          $seller->password = Hash::make($request->password);
+
+          $saved= $seller->save();
+
+          if ($saved) {
+            return $seller;
+          }
+          else{
+            return "Seller could not be registered";
+          }
         }
       }
 }
