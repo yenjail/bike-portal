@@ -263,7 +263,20 @@ class ClientController extends Controller
             return ['message'=>'User does not exist'];
         }
       }
+    }
 
+    public function getAllBrands(){
+        $brands = Bike::latest()->pluck('brand');
+        return $brands;
+    }
 
+    public function getModel($brand){
+        $models= Bike::where('brand',$brand)->pluck('model');
+        return $models;
+    }
+
+    public function getVersion($brand,$model){
+        $version= Bike::where('brand',$brand)->where('model',$model)->get();
+        return $version;
     }
 }
