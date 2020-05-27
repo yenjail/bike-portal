@@ -255,7 +255,7 @@ class ClientController extends Controller
         if ($users) {
             if (Hash::check($data['password'], $users->password)) {
                 $bikes = SellingBike::where('seller_id',$users->id)->with('bike','image','seller')->get();
-                return $bikes;
+                return [$users,$bikes];
             } else {
                 return ['message'=>'Password is incorrect'];
             }
