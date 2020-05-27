@@ -41,7 +41,7 @@ class ClientController extends Controller
 
     public function saveBikeForSale(Request $request){
         if($request->saleBike){
-            $item = $request->saleBike;
+            $item = json_decode($request->saleBike);
 
             $selling_bike =new SellingBike();
             $selling_bike->bike_id= $item->bike_id;
@@ -206,16 +206,18 @@ class ClientController extends Controller
       }
 
       public function saveSeller(Request $request){
-        $request->Signup->validate([
-            'name' => 'required',
-            'contact' => 'required',
-            'email' => 'required|email|unique:sellers',
-            'location' => 'required',
-            'password' => 'required',
-        ]);
+        // $request->Signup->validate([
+        //     'name' => 'required',
+        //     'contact' => 'required',
+        //     'email' => 'required|email|unique:sellers',
+        //     'location' => 'required',
+        //     'password' => 'required',
+        // ]);
+
+
 
         if($request->SignUp){
-            $item = $request->Signup;
+            $item = json_decode($request->Signup);
             return Seller::create([
                 'name' => $item->name,
                 'email' => $item->email,
