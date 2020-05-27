@@ -206,24 +206,20 @@ class ClientController extends Controller
       }
 
       public function saveSeller(Request $request){
-        // $request->Signup->validate([
-        //     'name' => 'required',
-        //     'contact' => 'required',
-        //     'email' => 'required|email|unique:sellers',
-        //     'location' => 'required',
-        //     'password' => 'required',
-        // ]);
-
-
-
-        if($request->SignUp){
-            $item = json_decode($request->Signup);
+        $request->validate([
+            'name' => 'required',
+            'contact' => 'required',
+            'email' => 'required|email|unique:sellers',
+            'location' => 'required',
+            'password' => 'required',
+        ]);
+        if($request){
             return Seller::create([
-                'name' => $item->name,
-                'email' => $item->email,
-                'number' => $item->contact,
-                'location' => $item->location,
-                'password' => Hash::make($item->password),
+                'name' => $request->name,
+                'email' => $request->email,
+                'number' => $request->contact,
+                'location' => $request->location,
+                'password' => Hash::make($request->password),
             ]);
         }
         else{

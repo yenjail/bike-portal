@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
 
 Route::get('/all-bike-details', 'ApiController\ClientController@getAllBikes');
@@ -25,5 +25,10 @@ Route::get('/bike-details/{id}', 'ApiController\ClientController@getBikeDetails'
 Route::get('/new-bikes', 'ApiController\ClientController@getNewBikes');
 Route::get('/old-bikes', 'ApiController\ClientController@getOldBikes');
 
-Route::post('/seller/sign-up', 'ApiController\ClientController@saveSeller');
-Route::post('/add-bike-for-sale', 'ApiController\ClientController@saveBikeForSale');
+Route::post('/sign-up', 'ApiController\ClientController@saveSeller');
+
+Route::post('/add-bike-for-sale/', 'ApiController\ClientController@saveBikeForSale');
+
+Route::post('hellopostapi', function() {
+    return json_encode( 'we are getting POST response');
+});
