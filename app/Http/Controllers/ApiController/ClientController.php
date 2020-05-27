@@ -9,9 +9,11 @@ use App\SellingBike;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\BikeImage;
+use App\Seller;
 use Redirect;
 use Image;
 use File;
+use Illuminate\Support\Facades\Hash;
 
 class ClientController extends Controller
 {
@@ -24,7 +26,6 @@ class ClientController extends Controller
         $bike = SellingBike::find($id);
         $details = SellingBike::find($id)->bike;
         $images = SellingBike::find($id)->bikeImages;
-
         return [$bike,$details,$images];
     }
 
@@ -39,30 +40,35 @@ class ClientController extends Controller
     }
 
     public function saveBikeForSale(Request $request){
-        $selling_bike =new SellingBike();
-        $selling_bike->bike_id= $request->bike_id;
-        $selling_bike->make_year= $request->make_year;
-        $selling_bike->kms_run= $request->kms_run;
-        $selling_bike->engine_cc= $request->engine_cc;
-        $selling_bike->color= $request->color;
-        $selling_bike->seller_id= null;
-        $selling_bike->bike_status= $request->bike_status;
-        $selling_bike->asking_price= $request->asking_price;
-        $selling_bike->seller_id= $request->seller_id;
-        $selling_bike->additional_details= $request->additional_details;
-        $selling_bike->post_date= Carbon::now();
-        $mySave = $selling_bike->save();
+        if($request->saleBike){
+            $item = $request->saleBike;
 
-        $pId = $selling_bike->id;
+            $selling_bike =new SellingBike();
+            $selling_bike->bike_id= $item->bike_id;
+            $selling_bike->make_year= $item->make_year;
+            $selling_bike->kms_run= $item->kms_run;
+            $selling_bike->engine_cc= $item->engine_cc;
+            $selling_bike->color= $item->color;
+            $selling_bike->bike_status= $item->bike_status;
+            $selling_bike->asking_price= $item->asking_price;
+            $selling_bike->seller_id= $item->seller_id;
+            $selling_bike->additional_details= $item->additional_details;
+            $selling_bike->post_date= Carbon::now();
+            $mySave = $selling_bike->save();
 
-        if ($mySave) {
-            $this->saveImageToProduct($selling_bike->id);
-            return ['message'=>'Bike for sale added!'];
+            $pId = $selling_bike->id;
+
+            if ($mySave) {
+                $this->saveImageToProduct($selling_bike->id);
+                return ['message'=>'Bike for sale added!'];
+            }
+            else {
+                return ['message'=>'Bike for sale adding failed!'];
+            }
+
         }
-
-
-        else {
-            return ['message'=>'Bike for sale adding failed!'];
+        else{
+            return ['message' => 'No selling bike details'];
         }
     }
 
@@ -127,7 +133,7 @@ class ClientController extends Controller
             }
 
         }
-      }
+    }
 
       public static function sanitizeFileName($str) {
           // Basic clean up
@@ -197,5 +203,29 @@ class ClientController extends Controller
 
             return response()->json(['uploaded' => '/upload/'.$imageName]);
            }
+      }
+
+      public function saveSeller(Request $request){
+        $request->Signup->validate([
+            'name' => 'required',
+            'contact' => 'required',
+            'email' => 'required|email|unique:sellers',
+            'location' => 'required',
+            'password' => 'required',
+        ]);
+
+        if($request->SignUp){
+            $item = $request->Signup;
+            return Seller::create([
+                'name' => $item->name,
+                'email' => $item->email,
+                'number' => $item->contact,
+                'location' => $item->location,
+                'password' => Hash::make($item->password),
+            ]);
+        }
+        else{
+            return "No seller data provided";
+        }
       }
 }

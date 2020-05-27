@@ -24,3 +24,6 @@ Route::get('/bike-details/{id}', 'ApiController\ClientController@getBikeDetails'
 
 Route::get('/new-bikes', 'ApiController\ClientController@getNewBikes');
 Route::get('/old-bikes', 'ApiController\ClientController@getOldBikes');
+
+Route::post('/seller/sign-up', 'ApiController\ClientController@saveSeller');
+Route::post('/add-bike-for-sale', 'ApiController\ClientController@saveBikeForSale');
