@@ -185,8 +185,8 @@ class ClientController extends Controller
 
          $questionsAsked= DB::table('questions')
                     ->join('selling_bikes','questions.selling_bike_id', '=', 'selling_bikes.id')
-                    ->join('sellers','questions.seller_id', '=', 'sellers.id')
-                    ->where('questions.selling_bike_id',$id)->get();
+                    ->join('sellers','selling_bikes.seller_id', '=', 'sellers.id')
+                    ->where('selling_bikes.seller_id',$id)->get();
 
         return [$userDetails, $profileDetails, $questionsAsked];
     }

@@ -34,10 +34,10 @@ Route::get('/{brand}', 'ApiController\ClientController@getModel');
 Route::get('/{brand}/{model}', 'ApiController\ClientController@getVersion');
 
 Route::post('/add-bike-for-sale/', 'ApiController\ClientController@saveBikeForSale');
-Route::post('/post-question', 'ApiController\ClientController@postQuestion');
+Route::post('/post-question', 'ApiController\ClientController@postQuestions');
 
 Route::delete('bike-for-sale/{id}', 'ApiController\ClientController@delete');
 
-Route::post('/post-question', 'ApiController\ClientController@postQuestion');
+
 
 
