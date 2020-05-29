@@ -72,16 +72,13 @@
                                     {{number_format((float)$list->bike->current_mp,2)}} <br>
                                     Asked Price: Rs. {{number_format((float)$list->asking_price,2)}}
                                   </td>
-                                  <td>{{$list->bike->features}}<br></td>
-                                  <td>@if ($list->seller_id == null)
-                                    <strong>SELLER NAME: {{$list->seller_name}}</strong><br>
-                                    <strong>CONTACT NO: {{$list->phone}}</strong><br>
-                                    @else
+                                  <td>{{$list->additional_details}}<br></td>
+                                  <td>
                                     <strong>SELLER NAME: {{$list->seller->name}}</strong><br>
-                                    <strong>CONTACT NO: {{$list->seller->phone}}</strong><br>
+                                    <strong>CONTACT NO: {{$list->seller->number}}</strong><br>
                                     <strong>LOCATION: {{$list->seller->location}}</strong><br>
 
-                                  @endif</td>
+                                  </td>
 
                                   <td>
                                     <a href="{{route('sellingbike.edit', $list->id)}}" title="Edit" id="editCategory" class="btn btn-success">

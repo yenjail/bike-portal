@@ -7,6 +7,7 @@ use App\Classes\slim;
 use Illuminate\Support\Facades\DB;
 use App\Bike;
 use App\SellingBike;
+use App\Seller;
 use Session;
 use App\BikeImage;
 use Redirect;
@@ -24,7 +25,8 @@ class SellingBikesController extends Controller
     public function showForm(){
     $brand = Bike::latest()->distinct('brand')->get(['brand']);
     $years = array_reverse(range(1900, strftime("%Y", time())));
-      return view("admin.sellingbikes.form",compact('brand','years'));
+    $seller = Seller::all();
+      return view("admin.sellingbikes.form",compact('brand','years','seller'));
     }
 
     public function edit(Request $request,$id){
@@ -35,8 +37,9 @@ class SellingBikesController extends Controller
 
         $proImage = BikeImage::where('selling_bike_id',$id)->get();
         $years = array_reverse(range(1900, strftime("%Y", time())));
+        $seller = Seller::all();
 
-        return view('admin.sellingbikes.editForm', compact('bikes','proImage','brand','years'));
+        return view('admin.sellingbikes.editForm', compact('bikes','proImage','brand','years','seller'));
       }
 
     public function fetch(Request $request){
@@ -139,11 +142,10 @@ class SellingBikesController extends Controller
       $selling_bike->kms_run= $request->kms_run;
       $selling_bike->engine_cc= $request->engine_cc;
       $selling_bike->color= $request->color;
-      $selling_bike->seller_id= null;
       $selling_bike->bike_status= $request->bike_status;
       $selling_bike->asking_price= $request->asking_price;
-      $selling_bike->seller_name= $request->seller_name;
-      $selling_bike->phone= $request->phone;
+      $selling_bike->seller_id= $request->seller_id;
+      
       $selling_bike->additional_details= $request->additional_details;
       $selling_bike->post_date= Carbon::now();
       $mySave = $selling_bike->save();
@@ -253,11 +255,10 @@ class SellingBikesController extends Controller
             $selling_bike->kms_run= $request->kms_run;
             $selling_bike->engine_cc= $request->engine_cc;
             $selling_bike->color= $request->color;
-            $selling_bike->seller_id= null;
+            $selling_bike->seller_id= $request->seller_id;
             $selling_bike->bike_status= $request->bike_status;
             $selling_bike->asking_price= $request->asking_price;
-            $selling_bike->seller_name= $request->seller_name;
-            $selling_bike->phone= $request->phone;
+           
             $selling_bike->additional_details= $request->additional_details;
             $selling_bike->post_date= Carbon::now();
             $mySave = $selling_bike->update();
@@ -274,7 +275,7 @@ class SellingBikesController extends Controller
                     return redirect()->route('sellingbike.index');
                   }
                   else {
-                    Session::flash('flash_message', 'Bike for sale details could not be updated!');
+                    Session::flash('flash_message', 'Bike for sale details successfully updated!');
 
                     return redirect()->route('sellingbike.index');
                   }

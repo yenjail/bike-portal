@@ -28,9 +28,21 @@ class ClientController extends Controller
     public function getBikeDetails($id){
         $bike = SellingBike::find($id);
         $details = SellingBike::find($id)->bike;
-        $images = SellingBike::find($id)->bikeImages;
-        $questions=SellingBike::where('id',$id)->with('questions','seller')->get();
-        return [$bike,$details,$images,$questions];
+        $seller = SellingBike::find($id)->seller;
+        $images = SellingBike::find($id)->image;
+        // $questions=SellingBike::where('id',$id)->with('questions','seller')->get();
+
+        $questions= DB::table('questions')
+                ->join('sellers','questions.seller_id', '=', 'sellers.id')
+                ->where('questions.selling_bike_id',$id)->get();
+
+        // DB::table('articles')
+        //         ->join('categories','articles.id', '=', 'categories.id')
+        //         ->join('user', 'articles.user_id', '=', 'user.id')
+        //         ->select('articles.id','articles.title','articles.body','user.user_name', 'categories.category_name')
+        //         ->get();
+
+        return [$bike,$details,$seller,$images,$questions];
     }
 
     public function getNewBikes(){
@@ -148,6 +160,7 @@ class ClientController extends Controller
     }
 
     public function postQuestions(Request $request){
+        
         $question= new Question();
         $question->selling_bike_id= $request->selling_bike_id;
         $question->seller_id= $request->seller_id;
@@ -161,8 +174,20 @@ class ClientController extends Controller
 
     public function getUserProfile($id){
         $userDetails = Seller::where('id', $id)->first();
-        $profileDetails = SellingBike::where('seller_id',$id)->with('bike','image','seller')->get();
-        $questionsAsked = SellingBike::with('questions')->get();
+        $profileDetails = SellingBike::where('seller_id',$id)->with('bike','image')->get();
+        // $questionsAsked = SellingBike::where('seller_id',$id)->with('questions')->get();
+
+        // $shares = DB::table('selling_bikes')
+        //         ->join('questions', 'selling_bikes.id', '=', 'questions.selling_bike_id')
+        //         ->join('followers', 'followers.user_id', '=', 'users.id')
+        //         ->where('followers.follower_id', '=', 3)
+        //         ->get();
+
+         $questionsAsked= DB::table('questions')
+                    ->join('selling_bikes','questions.selling_bike_id', '=', 'selling_bikes.id')
+                    ->join('sellers','questions.seller_id', '=', 'sellers.id')
+                    ->where('questions.selling_bike_id',$id)->get();
+
         return [$userDetails, $profileDetails, $questionsAsked];
     }
 
@@ -183,11 +208,14 @@ class ClientController extends Controller
 
     public function delete($id) {
         $bike = SellingBike::findOrFail($id);
-        if($bike)
-           $bike->delete(); 
-            return "Deleted!!"
-        else
+        if($bike){
+            $bike->delete(); 
+            return "Deleted!!";
+        }
+        else{
             return response()->json(error);
+        }
+           
         return response()->json(null); 
         }
 }

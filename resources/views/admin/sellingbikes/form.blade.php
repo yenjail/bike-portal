@@ -68,30 +68,19 @@
                       </div>
 
                       <div class="item form-group">
-                        <label class="col-form-label col-md-3 col-sm-3 label-align" for="seller_name">Seller Name<span class="required"></span>
+                        <label class="col-form-label col-md-3 col-sm-3 label-align" for="seller_id">Seller Name<span class="required"></span>
                         </label>
                         <div class="col-md-6 col-sm-6 ">
-                          <input type="text" id="seller_name" name="seller_name" class="form-control">
-                          @if ($errors->has('seller_name'))
-                              <span class="help-block" style="color: red;">
-                                <strong>{{ $errors->first('seller_name') }}</strong>
-                              </span>
-                            @endif
+                          <select name="seller_id" class="form-control" id="seller_id" name="seller_id">
+                            <option value="">Select Seller</option>
+                            @foreach($seller as $b)
+                            <option value="{{$b->id}}">{{$b->name}}-{{$b->number}}</option>
+                            @endforeach
+                          </select>
                         </div>
                       </div>
 
-                      <div class="item form-group">
-                        <label class="col-form-label col-md-3 col-sm-3 label-align" for="phone">Seller Contact No. <span class="required"></span>
-                        </label>
-                        <div class="col-md-6 col-sm-6 ">
-                          <input type="text" id="phone" name="phone" class="form-control">
-                          @if ($errors->has('phone'))
-                              <span class="help-block" style="color: red;">
-                                <strong>{{ $errors->first('phone') }}</strong>
-                              </span>
-                            @endif
-                        </div>
-                      </div>
+                      
 
                       <div class="item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align" for="kms_run">Kms run<span class="required"></span>
