@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use App\BikeImage;
 use App\Seller;
 use Redirect;
+use App\Question;
 use Image;
 use File;
 use Illuminate\Support\Facades\DB;
@@ -28,7 +29,8 @@ class ClientController extends Controller
         $bike = SellingBike::find($id);
         $details = SellingBike::find($id)->bike;
         $images = SellingBike::find($id)->bikeImages;
-        return [$bike,$details,$images];
+        $questions=SellingBike::where('id',$id)->with('questions','seller')->get();
+        return [$bike,$details,$images,$questions];
     }
 
     public function getNewBikes(){
@@ -42,76 +44,44 @@ class ClientController extends Controller
     }
 
     public function saveBikeForSale(Request $request){
+        
 
         $selling_bike =new SellingBike();
         $selling_bike->bike_id= $request->bike_id;
         $selling_bike->make_year= $request->make_year;
         $selling_bike->kms_run= $request->kms_run;
         $selling_bike->engine_cc= $request->engine_cc;
-        $selling_bike->color= $request->color;
+        if(is_null($request->color)){
+            $selling_bike->color= "#000000";
+        }
+        else{
+            $selling_bike->color= $request->color;
+        }
         $selling_bike->bike_status= $request->bike_status;
         $selling_bike->asking_price= $request->asking_price;
         $selling_bike->seller_id= $request->seller_id;
         $selling_bike->additional_details= $request->additional_details;
         $selling_bike->post_date= $request->upload_date;
+        
+        $selling_bike->additional_details= $request->additional_details;
+
         $mySave = $selling_bike->save();
 
-        $random=substr(str_shuffle("0123456789abcdefghijklmnopqrstvwxyzABCDEFGHIJKLMNOPQRSTVWXYZ"), 0, 4);
         if($mySave){
-            foreach(request()->image as $f){
-                $imageName = $f->getClientOriginalName();
-                $filesize = $f->getSize();
+            if($request->image){
+                $extension = explode('/', mime_content_type($request->image))[1];
+                $name = time().'.'.$extension;
+                // $name=time().'.'.explode('/', explode(':', substr($request->image,0, strpos($request->image, ';'))))[1][1];
+                $height = Image::make($request->image)->save(public_path('upload/'.$name));
+            }
 
-                $height = Image::make($f)->height();
-                $width = Image::make($f)->width();
-                $reqHeight = (500/$width) * $height;
+            $bikeImage = new BikeImage();
+            $bikeImage->selling_bike_id = $selling_bike->id;
+            $bikeImage->image = "upload/".$name;
 
-                if($filesize >= 1024)
-                {
-                $filesize = number_format($filesize / 1024, 2);
-                }
-
-                $image_path = "upload/".$imageName;
-
-                if(File::exists($image_path)){
-                    $newName = $random."_".$imageName;
-                    if(($width > 500) || ((int)$filesize > 50)){
-                        $image_resize = Image::make($f->getRealPath());
-                        $image_resize->resize(500, $reqHeight);
-                        $image_resize->save(public_path('upload/' .$newName));
-                    }
-                    else{
-                        $f->move(public_path('upload'), $newName);
-                    }
-
-                    $bikeImage = new BikeImage();
-                    $bikeImage->selling_bike_id = $request->bike_id;
-                    $bikeImage->image = "upload/".$newName;
-
-                    $saveImage = $bikeImage->save();
-
-                    return response()->json(['uploaded' => '/upload/'.$newName]);
-                }
-
-                else{
-
-                    if(($width > 500) || ((int)$filesize > 50)){
-                        $image_resize = Image::make($f->getRealPath());
-                        $image_resize->resize(500, $reqHeight);
-                        $image_resize->save(public_path('upload/' .$imageName));
-                    }
-                    else{
-                        $f->move(public_path('upload'), $imageName);
-                    }
-                        $newName = $random."_".$imageName;
-                        $bikeImage = new BikeImage();
-                        $bikeImage->selling_bike_id = $request->bike_id;
-                        $bikeImage->image = "upload/".$newName;
-
-                        $saveImage = $bikeImage->save();
-
-                        return response()->json(['uploaded' => '/upload/'.$imageName]);
-                }
+            $saveImage = $bikeImage->save();
+            if($saveImage){
+                return "Bike for sale saved";
             }
         }
         else {
@@ -177,10 +147,23 @@ class ClientController extends Controller
       }
     }
 
+    public function postQuestions(Request $request){
+        $question= new Question();
+        $question->selling_bike_id= $request->selling_bike_id;
+        $question->seller_id= $request->seller_id;
+        $question->question= $request->question;
+        $question->question_date= $request->question_date;
+        $saved= $question->save();
+        if ($saved) {
+            return ['message'=>'Question posted!!'];
+        }
+    }
+
     public function getUserProfile($id){
         $userDetails = Seller::where('id', $id)->first();
         $profileDetails = SellingBike::where('seller_id',$id)->with('bike','image','seller')->get();
-        return [$userDetails, $profileDetails];
+        $questionsAsked = SellingBike::with('questions')->get();
+        return [$userDetails, $profileDetails, $questionsAsked];
     }
 
     public function getAllBrands(){
@@ -197,4 +180,14 @@ class ClientController extends Controller
         $version= Bike::where('brand',$brand)->where('model',$model)->get();
         return $version;
     }
+
+    public function delete($id) {
+        $bike = SellingBike::findOrFail($id);
+        if($bike)
+           $bike->delete(); 
+            return "Deleted!!"
+        else
+            return response()->json(error);
+        return response()->json(null); 
+        }
 }

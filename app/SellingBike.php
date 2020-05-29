@@ -25,4 +25,8 @@ class SellingBike extends Model
     public function bikeImages(){
     	return $this->hasMany('App\BikeImage');
     }
+
+    public function questions(){
+        return $this->hasMany('App\Question');
+    }
 }
